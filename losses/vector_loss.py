@@ -1,5 +1,3 @@
-import math
-
 import torch
 import torch.nn as nn
 
@@ -11,9 +9,9 @@ def get_vector(vector):
     return v
 
 
-class GazeDirectionLoss(nn.Module):
+class VectorDifferenceLoss(nn.Module):
     def __init__(self, data_stats):
-        super(GazeDirectionLoss, self).__init__()
+        super(VectorDifferenceLoss, self).__init__()
         self.data_stats = data_stats
 
     def forward(self, target, pred):

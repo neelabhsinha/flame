@@ -15,7 +15,7 @@ from torch.utils.data import DataLoader
 from config import dataset_paths, weights_path, loggers_loc, project_path
 from datasets.data import Data, Sampler
 from losses.angular_loss import AngularGazeLoss
-from losses.vector_loss import GazeDirectionLoss
+from losses.vector_loss import VectorDifferenceLoss
 from models.additive_fusion import AdditiveFusionNet
 from models.aggregation_only import ConcatenatedFusionNet
 from models.baseline import BaselineNetwork
@@ -161,7 +161,7 @@ def train_network(network_name, dataset, epochs, frame_window, batch_size, split
 
     # Define Loss Functions
     eval_criterion = AngularGazeLoss(data_stats)
-    criterion = GazeDirectionLoss(data_stats)
+    criterion = VectorDifferenceLoss(data_stats)
     if torch.cuda.is_available():
         criterion = criterion.cuda()
         eval_criterion = eval_criterion.cuda()
