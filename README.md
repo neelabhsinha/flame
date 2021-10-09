@@ -92,7 +92,9 @@ Please do the following before running the code
 1. Please add all the dependecies in your environment which support the given version
 2. In config.py file, change/add all the dataset paths, and other parameters as defined
 
-## Code Specifications
+## Code Explanation
+
+The functions in the code have doctext which describe the purpose of the function and their parameters, return type
 
 Each model as described in the paper identified with a unique key in this code which we shall address by **model_key** in this readme. The keys to those models are defined below -
 
