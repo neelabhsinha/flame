@@ -114,7 +114,6 @@ def test_model(weight_path, network_name, train_dataset, test_data, resolution=1
     res_df = pd.DataFrame(result, columns=['yaw_p', 'pitch_p', 'yaw_t', 'pitch_t', 'loss_3d', 'error_y', 'error_p'])
     mean_test_loss = float(total_test_loss) / count
     std_test_loss = res_df['loss_3d'].std()
-    print(('Completed test with test loss = ' + str(mean_test_loss) + ' and std = ' + str(std_test_loss)))
     logging.info('Completed test with test loss = ' + str(mean_test_loss) + ' and std = ' + str(std_test_loss))
     if save_preds:
         filename = train_dataset + '_' + test_data + '_' + network_name

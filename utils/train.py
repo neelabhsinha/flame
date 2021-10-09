@@ -139,7 +139,6 @@ def train_network(network_name, dataset, epochs, frame_window, batch_size, split
             cp = torch.load(checkpoint, map_location=torch.device('cpu'))
         logging.info('Checkpoint details -')
         logging.info('Scheduler state - ' + str(cp['scheduler_state_dict']))
-        print('Scheduler state - ' + str(cp['scheduler_state_dict']))
         model.load_state_dict(cp['model_state_dict'])
         optimizer.load_state_dict(cp['optimizer_state_dict'])
         scheduler.load_state_dict(cp['scheduler_state_dict'])
