@@ -1,10 +1,10 @@
 import os
+import logging
 import pickle
+import sys
 from math import pi, atan, sqrt, atan2, asin
 
 import numpy as np
-from joblib import Parallel, delayed
-from tqdm import tqdm
 
 from config import project_path, dataset_paths
 from utils.helpers import get_2d_heatmap
@@ -104,7 +104,7 @@ def get_mean_and_std(dataset, split_nature='cross-person'):
     B_sq_sum = 0
     count = 0
     videos = os.listdir(os.path.join(path, 'images'))
-    for vid in tqdm(videos):
+    for vid in videos:
         if vid in train_videos:
             frames = os.listdir(os.path.join(path, 'images', vid))
             for frame in frames:
@@ -138,7 +138,7 @@ def get_and_save_heatmap(dataset):
     """
     # Load Data (Add the dataset path in config.py if adding new)
     try:
-        path = dataset_paths[dataset]
+        destdir = dataset_paths[dataset]
     except KeyError:
         logging.error('Path to dataset ' + dataset + ' not defined. Please define the same in config.py file')
         sys.exit()
@@ -150,7 +150,7 @@ def get_and_save_heatmap(dataset):
         os.mkdir(targetdir)
     files = os.listdir(fl_dir)
     files.sort()
-    for file in tqdm(files):
+    for file in files:
         pickle_path = os.path.join(fl_dir, file)
         target = os.path.join(targetdir, os.path.splitext(file)[0])
         if not os.path.exists(target):
@@ -158,8 +158,8 @@ def get_and_save_heatmap(dataset):
         with open(pickle_path, 'rb') as f:
             fl_2ds = pickle.load(f)
             f.close()
-        Parallel(n_jobs=72)(
-            delayed(get_heatmap_from_idx)(i, file, fl_2d, target, imgdir) for (i, fl_2d) in enumerate(fl_2ds))
+        for (i, fl_2d) in enumerate(fl_2ds):
+            get_heatmap_from_idx(i, file, fl_2d, target, imgdir)
 
 
 def get_heatmap_from_idx(i, file, fl_2d, target, imgdir):
