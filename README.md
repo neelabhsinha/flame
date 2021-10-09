@@ -14,6 +14,34 @@ arXiv Preprint: [arXiv](https://google.com)
 - scipy v1.5.2
 - matplotlib v3.3.4
 
+## FLAME - Model and Results
+
+**Model Architecture for FLAME** -
+
+![FLAME Architecture](images/model.png)
+
+
+**Results** -
+
+| Experimental Settings| ColumbiaGaze | EYEDIAP |
+|--|--|--|
+| FLAME | mean = 4.64 deg, std = 2.86 deg | mean = 4.62 deg, std = 2.93 deg|
+| F-AO | mean = 5.06 deg, std = 3.13 deg | mean = 4.80 deg, std = 3.02 deg|
+| F-AF | mean = 5.88 deg, std = 3.06 deg | mean = 5.30 deg, std = 3.03 deg|
+| F-B | mean = 5.93 deg, std = 3.20 deg| mean = 5.32 deg, std = 3.08 deg|
+
+## Project Installation
+
+This code requires Python 3, Pytorch, Cuda and other dependencies as listed above. Open Command Prompt/Terminal and use the following commands -
+```
+$ git clone https://github.com/neelabhsinha/flame.git
+$ cd flame
+$ pip3 install -r requirements.txt
+$ python3 main.py -h
+```
+Alternatively you can install the above dependencies in your environment as you prefer. The exact versions used in this project are listed above.
+To be able to do necessary data preprocessing, you would also optionally require [Openface 2.0](https://github.com/TadasBaltrusaitis/OpenFace) (or any other 2D landmark extractor) and [RetinaFace](https://github.com/serengil/retinaface) (or any other way to extract face crops). These are optional requirements and feel free to use any other toolkit to achieve the required objective. For more details read through the section 'Preparing the dataset'.
+
 ## Prepraring the dataset
 
 Prepare a directory structure as the following and add the root in the dataset_paths dictionary in [config.py](config.py).
@@ -68,9 +96,9 @@ dataset_root
 - gaze_angles - Gaze angles in the form of numpy arrays of the type [yaw, pitch] angle numpy arrays (index i of a file contains data corresponding to (i+1)th image and heatmap file inside the given subject folder as that of the pickle file).
 
 Steps - 
-1. Extract Face crops from [RetinaFace](https://github.com/serengil/retinaface) and zero-pad them to nearest 4:5 ratio
+1. Extract Face crops from [RetinaFace](https://github.com/serengil/retinaface) and zero-pad them to nearest 4:5 ratio (or any other way to extract face crops)
 2. Crop them to 384 * 450 pixels
-3. Run [Openface 2.0](https://github.com/TadasBaltrusaitis/OpenFace) on these images
+3. Run [Openface 2.0](https://github.com/TadasBaltrusaitis/OpenFace) on these images (or any other way to extract landmarks in desired order as given by Openface)
 4. Collect the 2D facial landmarks from it in the above directory structure as per the given instruction above
 5. Collect the images, head pose, and gaze targets in the above directory structure as per given instructions. To generate head_pose angles from rotation matrix, use get_head_pose_angles from [utils/preprocess.py](utils/preprocess.py)
 6. Add the root dataset directory to dataset_paths by dataset_name:dataset_path in [config.py](config.py) (Use this **dataset_name** everywhere in the code for all dataset name related parameters in the code)
@@ -100,10 +128,10 @@ Each model as described in the paper identified with a unique key in this code w
 
 |Model Name | Model key (model_key) | Model definition |
 |-----------|-----------------------|------------------|
-|FLAME|mmtm-fusion|models/mmtm_fusion.py|
-|F-AO|concatenated-fusion|models/aggregation_only.py|
-|F-AF|additive-fusion|models/additive_fusion.py|
-|F-B|baseline|models/baseline.py|
+|FLAME|mmtm-fusion|[models/mmtm_fusion.py](models/mmtm_fusion.py)|
+|F-AO|concatenated-fusion|[models/aggregation_only.py](models/aggregation_only.py)|
+|F-AF|additive-fusion|[models/additive_fusion.py](models/additive_fusion.py)|
+|F-B|baseline|[models/baseline.py](models/baseline.py)|
 
 We shall explain how to use this model key when we cover how to run the code in the below sections.
 
@@ -114,7 +142,7 @@ We shall explain how to use this model key when we cover how to run the code in 
 | FLAME | mmtm-fusion | [Checkpoint]() | [Checkpoint]()|
 | F-AO | concatenated-fusion | [Checkpoint]() | [Checkpoint]()|
 | F-AF | additive-fusion | [Checkpoint]() | [Checkpoint]()|
-| RGB Baseline | baseline | [Checkpoint]() | [Checkpoint]()|
+| F-B | baseline | [Checkpoint]() | [Checkpoint]()|
 
 The structure of these checkpoints is in the form of dictionary with following schema -
 
