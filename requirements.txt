@@ -1,0 +1,7 @@
+torch>=1.0.0
+torchvision
+numpy
+pandas
+opencv-python
+scipy
+matplotlib
