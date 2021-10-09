@@ -1,5 +1,5 @@
 import os
-from config import eyediap_processed_data, project_path, columbiagaze_processed_data, mpiigaze_processed_data
+from config import dataset_paths, project_path
 from random import shuffle
 import pickle
 
@@ -16,12 +16,14 @@ def split_data(dataset, split_nature, split_fraction=(0.8,0.1,0.1)):
     split['train'] = []
     split['test'] = []
     split['cv'] = []
-    if dataset == 'eyediap':
-        srcpath = os.path.join(eyediap_processed_data, 'images')
-        videos = os.listdir(srcpath)
-    elif dataset == 'columbiagaze':
-        srcpath = os.path.join(columbiagaze_processed_data, 'images')
-        videos = os.listdir(srcpath)
+    # Load Data (Add the dataset path in config.py if adding new)
+    try:
+        path = dataset_paths[dataset]
+    except KeyError:
+        logging.error('Path to dataset ' + dataset + ' not defined. Please define the same in config.py file')
+        sys.exit()
+    srcpath = os.path.join(path, 'images')
+    videos = os.listdir(srcpath)
     if type == 'random' or dataset != 'eyediap':
         shuffle(videos)
         count = 0

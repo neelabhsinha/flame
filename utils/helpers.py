@@ -1,15 +1,9 @@
-import os.path
-import pickle
+import random
 
 import cv2
 import numpy as np
-import matplotlib.pyplot as plt
 import torch
-from joblib import Parallel, delayed
 from scipy.stats import multivariate_normal
-import random
-
-from config import mpiigaze_processed_data
 
 
 # Generating Probability Distribution Heatmap

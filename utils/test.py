@@ -1,69 +1,49 @@
 import logging
-import math
 import os
 import pickle
 from math import pi
 
-import numpy as np
 import pandas as pd
 import torch
 import torch.nn as nn
-from matplotlib import pyplot as plt
 from torch.utils.data import DataLoader, BatchSampler
 
-from config import eyediap_processed_data, loggers_loc, test_path, project_path, columbiagaze_processed_data
+from config import dataset_paths, loggers_loc, test_path, project_path
 from datasets.data import Data, Sampler
 from losses.angular_loss import AngularGazeLoss
 from models.additive_fusion import AdditiveFusionNet
-from models.baseline import BaselineNetwork
 from models.aggregation_only import ConcatenatedFusionNet
+from models.baseline import BaselineNetwork
 from models.mmtm_fusion import MMTMFusionNet
-from utils.helpers import get_adjacency_matrix
 from utils.train import forward_propagation
 
 
-def test_model(frame_window, weight_path, split_nature='cross_person', test_data=None, save_preds=True):
+def test_model(weight_path, network_name, train_dataset, test_data, resolution=120, split_nature='cross-person', save_preds=True):
     """
-    executes the test of the trained model on a dataset
-    :param frame_window: frame_window parameter (with number of frames to process at once
-    :param weight_path: complete path of weights of the model on which test run has to be done
-    :param split_nature: nature of split
-    :param test_data: nature of test dataset if carrying out test on some other dataset for cross-dataset evaluation
-    :param save_preds: boolean to provide whether to save all predictions in a dataframe or not
-    :return: void (writes a CSV containing the results)
+    executes test of a model on a given dataset
+    :param weight_path: path to the checkpoint containing weights and other data
+    :param network_name: name of the network
+    :param train_dataset: name of the train dataset
+    :param test_data: name of the test dataset
+    :param resolution: resolution of the input image and heatmap used for training and testing
+    :param split_nature: nature of split - cross-person
+    :param save_preds: boolean to specify whether to save predictions or heatmap or not
+    :return: void
     """
-    foldername = os.path.split(os.path.split(weight_path)[0])[-1]
-    folderlist = foldername.split('_')
-    if len(folderlist) == 8:
-        if test_data is None:
-            dataset = foldername.split('_')[1]
-        else:
-            dataset = test_data
-        train_dataset = foldername.split('_')[1]
-    elif len(folderlist) == 9:
-        if test_data is None:
-            dataset = folderlist[1]
-        else:
-            dataset = test_data
-        train_dataset = folderlist[2]
-    network_name = foldername.split('_')[0]
-    network_name_list = network_name.split('-')
-    if network_name_list[0] != 'baseline' and len(network_name_list) == 3 or network_name_list[0] == 'baseline' and len(
-            network_name_list) == 2:
-        resolution = int(network_name_list[-1])
-    else:
-        resolution = 120
+    dataset = test_data
+    frame_window = 1
     logging.basicConfig(
         filename=loggers_loc + '/testing_' + train_dataset + '_' + network_name + '_' + split_nature + '.log',
         format='%(asctime)s %(levelname)s : %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p',
         level=logging.INFO)
     logging.info('Starting testing of ' + network_name + ' on ' + dataset + ' for ' + split_nature + ' split')
 
-    # Load Data
-    if dataset == 'eyediap':
-        path = eyediap_processed_data
-    elif dataset == 'columbiagaze':
-        path = columbiagaze_processed_data
+    # Load Data (Add the dataset path in config.py if adding new)
+    try:
+        path = dataset_paths[dataset]
+    except KeyError:
+        logging.error('Path to dataset ' + dataset + ' not defined. Please define the same in config.py file')
+        sys.exit()
     test_batch_sampler = BatchSampler(Sampler(dataset, path, 1, frame_window, 'test', split_nature),
                                       1, drop_last=True)
     data_set = Data(dataset, path, frame_window, 'test', resolution=resolution, split_nature=split_nature, crop='eye')
@@ -136,8 +116,7 @@ def test_model(frame_window, weight_path, split_nature='cross_person', test_data
     std_test_loss = res_df['loss_3d'].std()
     print(('Completed test with test loss = ' + str(mean_test_loss) + ' and std = ' + str(std_test_loss)))
     logging.info('Completed test with test loss = ' + str(mean_test_loss) + ' and std = ' + str(std_test_loss))
-    if save_preds and train_dataset == dataset:
-        filename = os.path.split(os.path.split(weight_path)[0])[-1] + '_' + \
-                   os.path.splitext(os.path.split(weight_path)[-1])[0]
+    if save_preds:
+        filename = train_dataset + '_' + test_data + '_' + network_name
         res_df.to_csv(os.path.join(test_path, filename + '.csv'))
     return mean_test_loss, std_test_loss

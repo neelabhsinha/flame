@@ -1,18 +1,12 @@
-import math
-
-import numpy as np
 import os
 import pickle
-from math import pi, atan, sqrt, atan2, asin, floor, ceil
-import imagesize
-import cv2
-import numpy as np
-import pandas as pd
-import shutil
-from tqdm import tqdm
-from joblib import Parallel, delayed
+from math import pi, atan, sqrt, atan2, asin
 
-from config import project_path, eyediap_processed_data, columbiagaze_processed_data, mpiigaze_processed_data
+import numpy as np
+from joblib import Parallel, delayed
+from tqdm import tqdm
+
+from config import project_path, dataset_paths
 from utils.helpers import get_2d_heatmap
 
 
@@ -91,12 +85,12 @@ def get_mean_and_std(dataset, split_nature='cross-person'):
     :return: void (saves the metadata as pickle)
     """
     path = None
-    if dataset == 'eyediap':
-        path = eyediap_processed_data
-    elif dataset == 'columbiagaze':
-        path = columbiagaze_processed_data
-    elif dataset == 'mpiigaze':
-        path = mpiigaze_processed_data
+    # Load Data (Add the dataset path in config.py if adding new)
+    try:
+        path = dataset_paths[dataset]
+    except KeyError:
+        logging.error('Path to dataset ' + dataset + ' not defined. Please define the same in config.py file')
+        sys.exit()
     with open(os.path.join(project_path, 'metadata', 'splits', 'data_split_' + dataset + '_' + split_nature + '.pkl'),
               'rb') as f:
         data_split = pickle.load(f)
@@ -142,12 +136,13 @@ def get_and_save_heatmap(dataset):
     :param dataset: dataset name
     :return: void
     """
-    if dataset == 'eyediap':
-        destdir = eyediap_processed_data
-    elif dataset == 'columbiagaze':
-        destdir = columbiagaze_processed_data
-    elif dataset == 'mpiigaze':
-        destdir = mpiigaze_processed_data
+    # Load Data (Add the dataset path in config.py if adding new)
+    try:
+        path = dataset_paths[dataset]
+    except KeyError:
+        logging.error('Path to dataset ' + dataset + ' not defined. Please define the same in config.py file')
+        sys.exit()
+
     fl_dir = os.path.join(destdir, 'facial_landmarks_2d')
     imgdir = os.path.join(destdir, 'images')
     targetdir = os.path.join(destdir, 'heatmaps')

@@ -1,27 +1,25 @@
-import os
-import pickle
 import argparse
 
-from utils.preprocess import get_mean_and_std, get_and_save_heatmap
+from config import epochs, frame_window, batch_size
 from utils.data_split import split_data
-from utils.train import train_network
-from config import epochs, frame_window, batch_size, project_path
+from utils.preprocess import get_mean_and_std, get_and_save_heatmap
 from utils.test import test_model
+from utils.train import train_network
 
 
 def get_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--dataset", default=None, help='specify dataset under operation')
+    parser.add_argument("--dataset", default=None, help='specify dataset under operation for training')
     parser.add_argument('--get_heatmap', default=False, action='store_true', help='Generate heatmaps from Facial Landmarks')
     parser.add_argument("--split_data", default=False, action='store_true',
                         help='split a given split of the data into train-test-cv')
     parser.add_argument("--split_nature", default='cross-person', help='nature of split into train-test-cv')
     parser.add_argument("--train", default=None, help='to train a given model with name of the model')
-    parser.add_argument("--test", default=None, help='to train a given model with complete path of the weights')
-    parser.add_argument("--test_data", default=None, help='to train a given model with complete path of the weights')
+    parser.add_argument("--test", default=None, help='to test a given model with the name of the model')
+    parser.add_argument("--test_data", default=None, help='to test a given model with specified test dataset')
     parser.add_argument('--load_checkpoint', default=None, help='load a given checkpoint with path')
     parser.add_argument('--get_data_stats', default=False, action='store_true', help='get mean, std of data with path of dataset and split nature')
-    parser.add_argument('--two-phase-training', default=False, action='store_true', help='enable two-phase training for FL modality')
+    parser.add_argument('--two-phase-training', default=False, action='store_true', help='enable two-phase training for FL modality')  # Not under operation
     args = parser.parse_args()
     return args
 
@@ -33,7 +31,6 @@ if __name__ == '__main__':
     split = args.split_data
     split_type = args.split_nature
     training_network = args.train
-    test_network = args.test
     stats_calc = args.get_data_stats
     checkpoint_path = None if args.load_checkpoint == 'no_checkpoint' else args.load_checkpoint
     if args.get_heatmap:
@@ -48,5 +45,5 @@ if __name__ == '__main__':
         get_mean_and_std(data, split_type)
     if training_network is not None:
         train_network(training_network, data, epochs, frame_window, batch_size, split_type, args.two_phase_training, checkpoint_path)
-    if test_network is not None:
-        test_model(frame_window, test_network, split_type, args.test_data)
+    if args.test is not None:
+        test_model(args.load_checkpoint, args.test, args.dataset, args.test_data)

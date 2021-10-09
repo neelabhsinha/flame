@@ -1,29 +1,25 @@
+import logging
+import os
 import pickle
-import time
-
 import sys
+from datetime import datetime
+from math import pi
 from subprocess import call
-from datasets.data import Data, Sampler
-from models.additive_fusion import AdditiveFusionNet
-from models.baseline import BaselineNetwork
-from models.aggregation_only import ConcatenatedFusionNet
-from models.mmtm_fusion import MMTMFusionNet
-from torch.utils.data import DataLoader
-from losses.regularized_loss import RegularizedLoss
-from config import eyediap_processed_data, weights_path, loggers_loc, project_path, columbiagaze_processed_data, \
-    mpiigaze_processed_data
-from tqdm import tqdm
+
+import numpy as np
 import torch
 import torch.nn as nn
-import os
-import numpy as np
-from math import pi, sqrt
-from datetime import datetime
-import logging
 from torch.utils.data import BatchSampler
-from losses.vector_loss import GazeDirectionLoss
+from torch.utils.data import DataLoader
+
+from config import dataset_paths, weights_path, loggers_loc, project_path
+from datasets.data import Data, Sampler
 from losses.angular_loss import AngularGazeLoss
-from utils.helpers import get_adjacency_matrix
+from losses.vector_loss import GazeDirectionLoss
+from models.additive_fusion import AdditiveFusionNet
+from models.aggregation_only import ConcatenatedFusionNet
+from models.baseline import BaselineNetwork
+from models.mmtm_fusion import MMTMFusionNet
 
 
 def print_trainable_parameters(model):
@@ -72,13 +68,8 @@ def train_network(network_name, dataset, epochs, frame_window, batch_size, split
     :return: void
     """
 
+    resolution = 120
     # Define Logger
-    network_name_list = network_name.split('-')
-    if network_name_list[0] != 'baseline' and len(network_name_list) == 3 or network_name_list[0] == 'baseline' and len(
-            network_name_list) == 2:
-        resolution = int(network_name_list[-1])
-    else:
-        resolution = 120
     logging.basicConfig(
         filename=loggers_loc + '/training_' + dataset + '_' + network_name + '_' + split_nature + '.log',
         format='%(asctime)s %(levelname)s : %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p', level=logging.INFO)
@@ -99,11 +90,12 @@ def train_network(network_name, dataset, epochs, frame_window, batch_size, split
         model = MMTMFusionNet(input_size=120)
         learning_rate = 0.0001
 
-    # Load Data (Add the dataset here if you use more data)
-    if dataset == 'eyediap':
-        path = eyediap_processed_data
-    elif dataset == 'columbiagaze':
-        path = columbiagaze_processed_data
+    # Load Data (Add the dataset path in config.py if adding new)
+    try:
+        path = dataset_paths[dataset]
+    except KeyError:
+        logging.error('Path to dataset ' + dataset + ' not defined. Please define the same in config.py file')
+        sys.exit()
 
     # Define Sampler and dataset
     train_batch_sampler = BatchSampler(Sampler(dataset, path, batch_size, frame_window, 'train', split_nature),
