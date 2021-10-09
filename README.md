@@ -16,7 +16,7 @@ arXiv Preprint: [arXiv](https://google.com)
 
 ## Prepraring the dataset
 
-Prepare a directory structure as the following and add the root in the dataset_paths dictionary in config.py
+Prepare a directory structure as the following and add the root in the dataset_paths dictionary in [config.py](config.py).
 ```
 dataset_root
 │
@@ -61,20 +61,20 @@ dataset_root
 |   |....
 │   
 ```
-- images - RGB images as numpy arrays with (height,width,channels)
-- heatmaps - 2D landmark heatmaps with (height, width, channels)
-- facial_landmarks_2d - 2D facial landmarks in the form of numpy arrays saved as pickle (index i of a file contains data corresponding to (i+1)th image and heatmap)
-- head_pose - Head pose angles in the form of numpy arrays of the type [pitch,yaw,roll] angle numpy arrays (index i of a file contains data corresponding to (i+1)th image and heatmap)
-- gaze_angles - Gaze angles in the form of numpy arrays of the type [yaw, pitch] angle numpy arrays (index i of a file contains data corresponding to (i+1)th image and heatmap)
+- images - RGB images as numpy arrays with (height,width,channels). Stored as one folder for each subject, and images inside those (as npy arrays).
+- heatmaps - 2D landmark heatmaps with (height, width, channels). Stored as one folder for each subject, and images inside those (as npy arrays).
+- facial_landmarks_2d - 2D facial landmarks in the form of numpy arrays saved as pickle (index i of a file contains data corresponding to (i+1)th image and heatmap file inside the given subject folder as that of the pickle file).
+- head_pose - Head pose angles in the form of numpy arrays of the type [pitch,yaw,roll] angle numpy arrays (index i of a file contains data corresponding to (i+1)th image and heatmap file inside the given subject folder as that of the pickle file). If not available, headpose can be used from the output of [Openface 2.0](https://github.com/TadasBaltrusaitis/OpenFace).
+- gaze_angles - Gaze angles in the form of numpy arrays of the type [yaw, pitch] angle numpy arrays (index i of a file contains data corresponding to (i+1)th image and heatmap file inside the given subject folder as that of the pickle file).
 
 Steps - 
 1. Extract Face crops from [RetinaFace](https://github.com/serengil/retinaface) and zero-pad them to nearest 4:5 ratio
 2. Crop them to 384 * 450 pixels
 3. Run [Openface 2.0](https://github.com/TadasBaltrusaitis/OpenFace) on these images
 4. Collect the 2D facial landmarks from it in the above directory structure as per the given instruction above
-5. Collect the images, head pose, and gaze targets in the above directory structure as per given instructions. To generate head_pose angles from rotation matrix, use get_head_pose_angles from utils/preprocess.py
-6. Add the root dataset directory to dataset_paths by dataset_name:dataset_path in config.py (Use this **dataset_name** everywhere in the code for all dataset name related parameters in the code)
-7. Generate heatmaps from the 2D landmarks after completing step 1-6. You can use the function get_and_save_heatmap given in utils/preprocess.py with dataset_name as parameter. Use the following command -
+5. Collect the images, head pose, and gaze targets in the above directory structure as per given instructions. To generate head_pose angles from rotation matrix, use get_head_pose_angles from [utils/preprocess.py](utils/preprocess.py)
+6. Add the root dataset directory to dataset_paths by dataset_name:dataset_path in [config.py](config.py) (Use this **dataset_name** everywhere in the code for all dataset name related parameters in the code)
+7. Generate heatmaps from the 2D landmarks after completing step 1-6. You can use the function get_and_save_heatmap given in [utils/preprocess.py](utils/preprocess.py) with dataset_name as parameter. Use the following command -
 
 ```
 $ python3 main.py --get_heatmap --dataset <dataset_name>
@@ -89,7 +89,7 @@ Notes
 ## Other Configurations required
 
 Please do the following before running the code
-1. Please add all the dependecies in your environment which support the given version
+1. Please add all the dependencies in your environment which support the given version
 2. In config.py file, change/add all the dataset paths, and other parameters as defined
 
 ## Code Explanation
@@ -133,20 +133,20 @@ The structure of these checkpoints is in the form of dictionary with following s
 
 Few other metadata that is required but is already given along with this repository for our experiments are described below. You may run it on your own but it's not compulsory.
 
-1. **Generating Split** - Decide which folders will be in train, test, and val splits. Can be done using the following script (our split is available in metadata/splits directory) -
+1. **Generating Split** - Decide which folders will be in train, test, and val splits. Can be done using the following script (our split is available in [metadata/splits](metadata/splits) directory) -
 
 ```
 $ python3 main.py --split_data --split_nature cross-person --data <dataset_name>
 ```
 
-Function is available at utils/data_split.py for viewing the schema of the file
+Function is available at [utils/data_split.py](utils/data_split.py) for viewing the schema of the file
 
-2. **Getting maximum and minimum values of each input and output** - Used for normalization purposes and is extracted only for the training data. For our split and data, the parameters are given in metadata/data_statistics in the form of a dictionary stored as pickle. Use the following command to extract these parameters -
+2. **Getting maximum and minimum values of each input and output** - Used for normalization purposes and is extracted only for the training data. For our split and data, the parameters are given in [metadata/data_statistics](metadata/data_statistics) in the form of a dictionary stored as pickle. Use the following command to extract these parameters -
 
 ```
 $ python3 main.py --get_data_stats --dataset <dataset_name>
 ```
-Function is available at utils/preprocess.py by the name get_mean_and_std
+Function is available at [utils/preprocess.py](utils/preprocess.py) by the name get_mean_and_std
 
 ## Evaluations/Testing
 
@@ -164,7 +164,7 @@ index, yaw_p, pitch_p, yaw_t, pitch_t, loss_3d, error_y, error_p
 ```
 
 Note -
-- To generate predictions on the customized pipeline, you can create an input pipeline on your own and use the function forward_propagation inside utils/train.py and provide the inputs to the same. It will return you the values in order of a tuple ((predicted_yaw, predicted_pitch),(true_yaw,true_pitch),error).
+- To generate predictions on the customized pipeline, you can create an input pipeline on your own and use the function forward_propagation inside [utils/train.py](utils/train.py) and provide the inputs to the same. It will return you the values in order of a tuple ((predicted_yaw, predicted_pitch),(true_yaw, true_pitch), error) of type (tensor, tensor, float).
 
 ## Training
 
@@ -175,7 +175,7 @@ Note -
 $ python3 main.py --train <model_key> --dataset <dataset_name>
 ```
 
-To change training hyperparameters, change variables in config.py file
+To change training hyperparameters, change variables in [config.py](config.py) file
 
 Training from a checkpoint -
 ```
