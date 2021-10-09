@@ -81,9 +81,6 @@ class Data(Dataset):
             self.vid_paths.append(os.path.join(self.path, 'images', vid))
         for vid in sorted(os.listdir(os.path.join(self.path, 'heatmaps'))):
             self.heatmap_paths.append(os.path.join(self.path, 'heatmaps', vid))
-        for fl in sorted(os.listdir(os.path.join(self.path, 'facial_landmarks'))):
-            if fl.endswith('.pkl'):
-                self.fl_paths.append(os.path.join(self.path, 'facial_landmarks', fl))
         for fl_2d in sorted(os.listdir(os.path.join(self.path, 'facial_landmarks_2d'))):
             if fl_2d.endswith('.pkl'):
                 self.fl_2d_paths.append(os.path.join(self.path, 'facial_landmarks_2d', fl_2d))
