@@ -65,12 +65,12 @@ Files in the project are described in the following table -
 
 Each model as described in the paper is identified with a unique key in this code which we shall address by **model_key** in this readme. The keys to those models along with the pretrained checkpoints (containing model weights, and other variables related to the final state) are given in the table below -
 
-|Model Name | Model key (model_key) | Model definition | EYEDIAP Checkpoint | Columbiagaze Checkpoint|
+|Model Name | Model key (model_key) | Model definition | Columbiagaze Checkpoint | EYEDIAP Checkpoint|
 |-----------|-----------------------|------------------|--------------------|------------------------|
-|FLAME|mmtm-fusion|[models/mmtm_fusion.py](models/mmtm_fusion.py)| [Checkpoint]() | [Checkpoint]()|
-|F-AO|concatenated-fusion|[models/aggregation_only.py](models/aggregation_only.py)| [Checkpoint]() | [Checkpoint]()|
-|F-AF|additive-fusion|[models/additive_fusion.py](models/additive_fusion.py)| [Checkpoint]() | [Checkpoint]()|
-|F-B|baseline|[models/baseline.py](models/baseline.py)| [Checkpoint]() | [Checkpoint]()|
+|FLAME|mmtm-fusion|[models/mmtm_fusion.py](models/mmtm_fusion.py)| [Checkpoint](https://drive.google.com/file/d/1jPq5LfmlS0fLVNLNAs0vuipC44MMj5Vg/view?usp=sharing) | [Checkpoint](https://drive.google.com/file/d/1CPsBRA9DppCpQjYyBxmYmdvzGAUcKz14/view?usp=sharing)|
+|F-AO|concatenated-fusion|[models/aggregation_only.py](models/aggregation_only.py)| TBA | TBA|
+|F-AF|additive-fusion|[models/additive_fusion.py](models/additive_fusion.py)| TBA | TBA|
+|F-B|baseline|[models/baseline.py](models/baseline.py)| TBA | TBA|
 
 We shall explain how to use this **model_key** when we cover how to run the code in the below sections. The format of these checkpoints is in the form of dictionary with following schema -
 
