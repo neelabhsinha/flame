@@ -1,7 +1,7 @@
 # FLAME
 Original Pytorch Implementation of FLAME: Facial Landmark Heatmap Activated Multimodal Gaze Estimation, accepted at the 17th IEEE Internation Conference on Advanced Video and Signal-based Surveillance, AVSS 2021, Virtual, November 16-19, 2021.
 
-arXiv Preprint: [arXiv](https://google.com)
+arXiv Preprint: [arXiv](https://arxiv.org/abs/2110.04828)
 
 ## Dependencies used
 - python v3.6.13
@@ -224,6 +224,16 @@ A log file is maintained by the name training\_<dataset_name>\_<model_name>\_cro
 ## Citation
 
 If you found our work helpful in your use case, please cite the following paper -
+```
+@misc{sinha2021flame,
+      title={FLAME: Facial Landmark Heatmap Activated Multimodal Gaze Estimation}, 
+      author={Neelabh Sinha and Michal Balazia and François Bremond},
+      year={2021},
+      eprint={2110.04828},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV}
+}
+```
 
 
 
