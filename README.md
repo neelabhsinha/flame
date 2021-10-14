@@ -25,14 +25,14 @@ arXiv Preprint: [arXiv](https://arxiv.org/abs/2110.04828)
 
 | Experimental Settings| ColumbiaGaze | EYEDIAP |
 |--|--|--|
-| FLAME | mean = 4.64 deg, std = 2.86 deg | mean = 4.62 deg, std = 2.93 deg|
-| F-AO | mean = 5.06 deg, std = 3.13 deg | mean = 4.80 deg, std = 3.02 deg|
-| F-AF | mean = 5.88 deg, std = 3.06 deg | mean = 5.30 deg, std = 3.03 deg|
-| F-B | mean = 5.93 deg, std = 3.20 deg| mean = 5.32 deg, std = 3.08 deg|
+| FLAME | mean = 4.64°, std = 2.86° | mean = 4.62°, std = 2.93°|
+| F-AO | mean = 5.06°, std = 3.13° | mean = 4.80°, std = 3.02°|
+| F-AF | mean = 5.88°, std = 3.06° | mean = 5.30°, std = 3.03°|
+| F-B | mean = 5.93°, std = 3.20°| mean = 5.32°, std = 3.08°|
 
 ## Project Installation
 
-This code requires Python 3, Pytorch, Cuda and other dependencies as listed above. Open Command Prompt/Terminal and use the following commands to clone the project and install dependencies (python, pip are pre-requisites) -
+This code requires Python 3, Pytorch, Cuda and other dependencies as listed above. Open Command Prompt/Terminal and use the following commands to clone the project and install dependencies (python, pip are prerequisites) -
 ```
 $ git clone https://github.com/neelabhsinha/flame.git
 $ cd flame
@@ -43,8 +43,6 @@ Alternatively you can install the above dependencies in your environment as you 
 To be able to do necessary data preprocessing, you would also optionally require [Openface 2.0](https://github.com/TadasBaltrusaitis/OpenFace) (or any other 2D landmark extractor) and [RetinaFace](https://github.com/serengil/retinaface) (or any other way to extract face crops). These are optional requirements and feel free to use any other toolkit to achieve the required objective. For more details read through the section 'Preparing the dataset'.
 
 ## Project Description
-
-The functions in the code have doctext which describe the purpose of the function and their parameters, return type.
 
 Files in the project are described in the following table - 
 
@@ -63,16 +61,16 @@ Files in the project are described in the following table -
 |[config.py](config.py)|Contains configuration veriables like dataset paths, project path, path to store weights, logs, and training hyperparameters like maximum epoch, batch size. Edit this file before running the project with appropriate paths.|
 |[main.py](main.py)|Contains main code that drives the entire project as per arguments provided (details are explained in following sections).|
 
-Each model as described in the paper is identified with a unique key in this code which we shall address by **model_key** in this readme. The keys to those models along with the pretrained checkpoints (containing model weights, and other variables related to the final state) are given in the table below -
+Each model as described in the paper is identified with a unique key in this code which we shall address by **model_id** in this readme. The keys to those models along with the pretrained checkpoints (containing model weights, and other variables related to the final state) are given in the table below -
 
-|Model Name | Model key (model_key) | Model definition | Columbiagaze Checkpoint | EYEDIAP Checkpoint|
+|Model Name | Model ID (model_id) | Model definition | Columbiagaze Checkpoint | EYEDIAP Checkpoint|
 |-----------|-----------------------|------------------|--------------------|------------------------|
 |FLAME|mmtm-fusion|[models/mmtm_fusion.py](models/mmtm_fusion.py)| [Checkpoint](https://drive.google.com/file/d/1jPq5LfmlS0fLVNLNAs0vuipC44MMj5Vg/view?usp=sharing) | [Checkpoint](https://drive.google.com/file/d/1CPsBRA9DppCpQjYyBxmYmdvzGAUcKz14/view?usp=sharing)|
 |F-AO|concatenated-fusion|[models/aggregation_only.py](models/aggregation_only.py)| TBA | TBA|
 |F-AF|additive-fusion|[models/additive_fusion.py](models/additive_fusion.py)| TBA | TBA|
 |F-B|baseline|[models/baseline.py](models/baseline.py)| TBA | TBA|
 
-We shall explain how to use this **model_key** when we cover how to run the code in the below sections. The format of these checkpoints is in the form of dictionary with following schema -
+The format of these checkpoints is in the form of dictionary with following schema -
 
 ```
 {
@@ -191,10 +189,10 @@ Function is available at [utils/preprocess.py](utils/preprocess.py) by the name 
 3. Execute the following command -
 
 ```
-$ python3 main.py --test <model_key> --dataset <dataset_name of training dataset> --test_data <dataset_name of testing dataset> --load_checkpoint <complete path of the checkpoint on which model is to be tested>
+$ python3 main.py --test <model_id> --dataset <dataset_name of training dataset> --test_data <dataset_name of testing dataset> --load_checkpoint <complete path of the checkpoint on which model is to be tested>
 ```
 
-A csv file will be stored at the test_path location as specified in config.py by the name '<train_dataset_name>\_<test_dataset_name>\_<model_key>.csv' having the following schema for all provided images in order -
+A csv file will be stored at the test_path location as specified in config.py by the name '<train_dataset_name>\_<test_dataset_name>\_<model_id>.csv' having the following schema for all provided images in order -
 ```
 index, yaw_p, pitch_p, yaw_t, pitch_t, loss_3d, error_y, error_p
 ```
@@ -209,14 +207,14 @@ Note -
 2. Execute the following command -
 
 ```
-$ python3 main.py --train <model_key> --dataset <dataset_name>
+$ python3 main.py --train <model_id> --dataset <dataset_name>
 ```
 
 To change training hyperparameters, change variables in [config.py](config.py) file
 
 Training from a checkpoint -
 ```
-$ python3 main.py --train <model_key< --dataset <dataset_name> --load_checkpoint <complete path of checkpoint file>
+$ python3 main.py --train <model_id< --dataset <dataset_name> --load_checkpoint <complete path of checkpoint file>
 ```
 
 A log file is maintained by the name training\_<dataset_name>\_<model_name>\_cross-person.log in the loggers\_loc directory logging details of losses after each epoch is completed.
