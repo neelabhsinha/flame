@@ -214,7 +214,7 @@ To change training hyperparameters, change variables in [config.py](config.py) f
 
 Training from a checkpoint -
 ```
-$ python3 main.py --train <model_id< --dataset <dataset_name> --load_checkpoint <complete path of checkpoint file>
+$ python3 main.py --train <model_id> --dataset <dataset_name> --load_checkpoint <complete path of checkpoint file>
 ```
 
 A log file is maintained by the name training\_<dataset_name>\_<model_name>\_cross-person.log in the loggers\_loc directory logging details of losses after each epoch is completed.
