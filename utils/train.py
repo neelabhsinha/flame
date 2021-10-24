@@ -127,7 +127,7 @@ def train_network(network_name, dataset, epochs, frame_window, batch_size, split
     logging.info('Optimizer initialized')
 
     # Define Scheduler
-    scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, milestones=[20, 30, 40], gamma=0.5)
+    scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, milestones=[85, 120, 175], gamma=0.5)
     logging.info('Scheduler initialized')
 
     # Load Checkpoint (if any)
