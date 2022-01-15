@@ -226,14 +226,14 @@ A log file is maintained by the name training\_<dataset_name>\_<model_name>\_cro
 If you found our work helpful in your use case, please cite the following paper -
 ```
 @INPROCEEDINGS{9663816,
-author={Sinha, Neelabh and Balazia, Michal and Bremond, François},  
-booktitle={2021 17th IEEE International Conference on Advanced Video and Signal Based Surveillance (AVSS)},
-title={FLAME: Facial Landmark Heatmap Activated Multimodal Gaze Estimation},
-year={2021},
-volume={},
-number={},
-pages={1-8},
-doi={10.1109/AVSS52988.2021.9663816}
+  author={Sinha, Neelabh and Balazia, Michal and Bremond, François},  
+  booktitle={2021 17th IEEE International Conference on Advanced Video and Signal Based Surveillance (AVSS)},
+  title={FLAME: Facial Landmark Heatmap Activated Multimodal Gaze Estimation},
+  year={2021},
+  volume={},
+  number={},
+  pages={1-8},
+  doi={10.1109/AVSS52988.2021.9663816}
 }
 ```
 
