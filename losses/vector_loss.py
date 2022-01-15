@@ -20,5 +20,6 @@ class VectorDifferenceLoss(nn.Module):
             'min']
         v_p = get_vector(y_p)
         v_t = get_vector(y_t)
-        loss = torch.sum(torch.square(v_p - v_t))
+        loss = torch.sum(torch.square(v_p - v_t),1)
+        loss = torch.mean(loss)
         return loss
