@@ -67,10 +67,10 @@ Each model as described in the paper is identified with a unique key in this cod
 
 |Model Name | Model ID (model_id) | Model definition | Columbiagaze Checkpoint | EYEDIAP Checkpoint|
 |-----------|-----------------------|------------------|--------------------|------------------------|
-|FLAME|mmtm-fusion|[models/mmtm_fusion.py](models/mmtm_fusion.py)| [Checkpoint](https://drive.google.com/file/d/1jPq5LfmlS0fLVNLNAs0vuipC44MMj5Vg/view?usp=sharing) | [Checkpoint](https://drive.google.com/file/d/1CPsBRA9DppCpQjYyBxmYmdvzGAUcKz14/view?usp=sharing)|
-|F-AO|concatenated-fusion|[models/aggregation_only.py](models/aggregation_only.py)| TBA | TBA|
-|F-AF|additive-fusion|[models/additive_fusion.py](models/additive_fusion.py)| TBA | TBA|
-|F-B|baseline|[models/baseline.py](models/baseline.py)| TBA | TBA|
+|FLAME|mmtm-fusion|[models/mmtm_fusion.py](models/mmtm_fusion.py)| [Checkpoint](https://app.digiboxx.com/share/ab3aecb5ce2df943) | [Checkpoint](https://app.digiboxx.com/share/0d5cd51a26c82e9f)|
+|F-AO|concatenated-fusion|[models/aggregation_only.py](models/aggregation_only.py)| -- | --|
+|F-AF|additive-fusion|[models/additive_fusion.py](models/additive_fusion.py)| -- | --|
+|F-B|baseline|[models/baseline.py](models/baseline.py)| -- | --|
 
 The format of these checkpoints is in the form of dictionary with following schema -
 
