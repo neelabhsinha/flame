@@ -1,4 +1,10 @@
 # FLAME
+
+![Type](https://img.shields.io/badge/arXiv-2110.04828-yellow)
+![Concepts](https://img.shields.io/badge/Concepts-Deep_Learning,_Computer_Vision-blue)
+![Language](https://img.shields.io/badge/Language-Python-red)
+![Libraries](https://img.shields.io/badge/Libraries-PyTorch,_Scikit_Learn-green)
+
 Original Pytorch Implementation of FLAME: Facial Landmark Heatmap Activated Multimodal Gaze Estimation, accepted at the 17th IEEE Internation Conference on Advanced Video and Signal-based Surveillance, AVSS 2021, Virtual, November 16-19, 2021.
 
 arXiv Preprint: [2110.04828](https://arxiv.org/abs/2110.04828)
